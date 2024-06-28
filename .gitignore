@@ -30,7 +30,7 @@ bin/
 
 
 ### resources ###
-src/resources/config.properties
+src/resources/
 
 
 .idea
