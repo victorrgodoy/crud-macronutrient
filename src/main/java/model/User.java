@@ -16,6 +16,5 @@ public class User {
     private final double height;
     private final Gender gender;
     private final Objective objective;
-
-
+    private final ActivityLevel activityLevel;
 }

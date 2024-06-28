@@ -1,6 +1,7 @@
 package dao;
 
 import factory.ConnectionFactory;
+import model.ActivityLevel;
 import model.Gender;
 import model.Objective;
 import model.User;
@@ -26,8 +27,8 @@ public class UserDAO {
     }
 
     public void create(User user) {
-        String sql = "INSERT INTO user (cpf, name, age, weight, height, gender, objective) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO user (cpf, name, age, weight, height, gender, objective, activity_level) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getCpf());
             preparedStatement.setString(2, user.getName());
@@ -36,6 +37,7 @@ public class UserDAO {
             preparedStatement.setDouble(5, user.getHeight());
             preparedStatement.setString(6, String.valueOf(user.getGender()));
             preparedStatement.setString(7, String.valueOf(user.getObjective()));
+            preparedStatement.setString(8, String.valueOf(user.getActivityLevel()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating user", e);
@@ -55,7 +57,8 @@ public class UserDAO {
                     double height = resultSet.getDouble("height");
                     Gender gender = Gender.valueOf(resultSet.getString("gender"));
                     Objective objective = Objective.valueOf(resultSet.getString("objective"));
-                    return new User(cpfResult, name, age, weight, height, gender, objective);
+                    ActivityLevel activityLevel = ActivityLevel.valueOf(resultSet.getString("activity_level"));
+                    return new User(cpfResult, name, age, weight, height, gender, objective, activityLevel);
                 }
             }
         } catch (SQLException e) {
