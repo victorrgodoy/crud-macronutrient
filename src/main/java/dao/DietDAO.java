@@ -64,12 +64,12 @@ public class DietDAO {
             preparedStatement.setInt(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    double imc = resultSet.getDouble("imc");
                     double cals = resultSet.getDouble("cals");
                     double proteins = resultSet.getDouble("proteins");
                     double carbs = resultSet.getDouble("carbs");
                     double fats = resultSet.getDouble("fats");
-                    return new Diet(cals, proteins, carbs, fats);
+                    LocalDate date = resultSet.getDate("date").toLocalDate();
+                    return new Diet(cals, proteins, carbs, fats, date);
                 }
             }
         } catch (SQLException e) {

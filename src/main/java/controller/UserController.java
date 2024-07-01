@@ -2,48 +2,30 @@ package controller;
 
 import dao.UserDAO;
 import model.*;
+import util.InputReader;
+
 import java.util.Scanner;
 
 public class UserController {
     private final Scanner scanner;
     private final UserDAO userDAO;
+    private final InputReader inputReader;
+    private final DietController dietController;
 
-    public UserController(Scanner scanner){
+    public UserController(Scanner scanner) {
         this.scanner = scanner;
         this.userDAO = UserDAO.getInstance();
+        this.inputReader = new InputReader(scanner);
+        this.dietController = new DietController();
     }
 
     public void createUser() {
-        DietController dietController = new DietController();
-        HistoricController historicController = new HistoricController();
-
         try {
             System.out.println("=== Novo usuário ===");
-            String name = readName();
-            String cpf = readCpf();
-            int age = readAge();
-            double weight = readWeight();
-            double height = readHeight();
-            Gender gender = readGender();
-            Objective objective = readObjective();
-            ActivityLevel activityLevel = readActivityLevel();
-
-            User user = User.builder()
-                    .cpf(cpf)
-                    .name(name)
-                    .age(age)
-                    .weight(weight)
-                    .height(height)
-                    .gender(gender)
-                    .objective(objective)
-                    .activityLevel(activityLevel)
-                    .build();
-
+            User user = builderUser();
             userDAO.create(user);
-            historicController.createHistoric(user);
-            dietController.createDiet(user);
             System.out.println("Usuário criado com sucesso!");
-
+            dietController.createDiet(user);
         } catch (IllegalArgumentException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (Exception e) {
@@ -51,17 +33,62 @@ public class UserController {
         }
     }
 
+    public void readUser() {
+        try {
+            String cpf = inputReader.readCpf();
+            User user = userDAO.read(cpf);
 
+            if (user == null) {
+                System.out.println("Usuário não encontrado.");
+                return;
+            }
+            System.out.println("=== Dados do usuário ===");
+            System.out.println("Nome: " + user.getName());
+            System.out.println("Idade: " + user.getAge());
+            System.out.println("Peso: " + user.getWeight() + " kg");
+            System.out.println("Altura: " + user.getHeight() + " cm");
+            System.out.println("Gênero: " + user.getGender());
+            System.out.println("Objetivo: " + user.getObjective());
+            System.out.println("Nível de Atividade: " + user.getActivityLevel());
+            System.out.println("------------------------------");
+            dietController.readDiet(cpf);
+        } catch (Exception e) {
+            System.out.println("Erro: Ocorreu um problema ao ler o usuário. Por favor, tente novamente.");
+        }
+    }
+
+    public void updateUser() {
+        try {
+            System.out.println("=== Atualização usuário ===");
+            String cpf = inputReader.readCpf();
+
+            User existingUser = userDAO.read(cpf);
+            if (existingUser == null) {
+                System.out.println("Usuário não encontrado.");
+                return;
+            }
+
+            User user = builderUser();
+            userDAO.update(cpf, user);
+            System.out.println("Usuário atualizado com sucesso!");
+            dietController.updateDiet(user);
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Erro: Ocorreu um problema ao atualizar o usuário. Por favor, tente novamente.");
+        }
+    }
 
     public void deleteUser() {
         try {
             System.out.println("=== Deletando usuário ===");
+            String cpf = inputReader.readCpf();
 
-            System.out.print("Digite o CPF: ");
-            String cpf = scanner.next().trim();
-
-            if (!cpf.matches("[0-9]+") || cpf.length() != 11) {
-                throw new IllegalArgumentException("CPF inválido. Deve conter 11 dígitos numéricos.");
+            User user = userDAO.read(cpf);
+            if (user == null) {
+                System.out.println("Usuário não encontrado.");
+                return;
             }
 
             System.out.print("Você tem certeza que deseja deletar o usuário (sim / nao): ");
@@ -83,117 +110,26 @@ public class UserController {
         }
     }
 
+    private User builderUser() {
+        String name = inputReader.readName();
+        String cpf = inputReader.readCpf();
+        int age = inputReader.readAge();
+        double weight = inputReader.readWeight();
+        double height = inputReader.readHeight();
+        Gender gender = inputReader.readGender();
+        Objective objective = inputReader.readObjective();
+        ActivityLevel activityLevel = inputReader.readActivityLevel();
 
-
-
-
-    //------------------------------------------------------//
-    private String readName() {
-        while (true) {
-            System.out.print("Digite o nome: ");
-            String name = scanner.nextLine().trim();
-            if (!name.matches("[a-zA-Z ]+")) {
-                System.out.println("Nome inválido. Use apenas letras.");
-            } else {
-                return name;
-            }
-        }
+        return User.builder()
+                .cpf(cpf)
+                .name(name)
+                .age(age)
+                .weight(weight)
+                .height(height)
+                .gender(gender)
+                .objective(objective)
+                .activityLevel(activityLevel)
+                .build();
     }
-
-    private String readCpf() {
-        while (true) {
-            System.out.print("Digite o CPF: ");
-            String cpf = scanner.nextLine().trim();
-            if (!cpf.matches("[0-9]+") || cpf.length() != 11) {
-                System.out.println("CPF inválido. Deve conter exatamente 11 dígitos numéricos.");
-            } else {
-                return cpf;
-            }
-        }
-    }
-
-    private int readAge() {
-        while (true) {
-            System.out.print("Digite a idade: ");
-            String input = scanner.nextLine().trim();
-            try {
-                int age = Integer.parseInt(input);
-                if (age <= 0 || age >= 150) {
-                    System.out.println("Idade inválida. Insira um valor maior que 0 e menor que 150.");
-                    continue;
-                }
-                return age;
-            } catch (NumberFormatException e) {
-                System.out.println("Erro: Formato de idade inválido. Por favor, insira um número inteiro.");
-            }
-        }
-    }
-
-    private double readWeight() {
-        while (true) {
-            System.out.print("Digite o peso (kg): ");
-            String input = scanner.nextLine().trim();
-            try {
-                double weight = Double.parseDouble(input);
-                if (weight <= 0) {
-                    System.out.println("Erro: Peso deve ser maior que zero. Tente novamente.");
-                    continue;
-                }
-                return weight;
-            } catch (NumberFormatException e) {
-                System.out.println("Erro: Formato de peso inválido. Tente novamente.");
-            }
-        }
-    }
-
-    private double readHeight() {
-        while (true) {
-            System.out.print("Digite a altura (cm): ");
-            String input = scanner.nextLine().trim();
-            try {
-                double height = Double.parseDouble(input);
-                if (height <= 0) {
-                    System.out.println("Erro: Altura deve ser maior que zero. Tente novamente.");
-                    continue;
-                }
-                return height;
-            } catch (NumberFormatException e) {
-                System.out.println("Erro: Formato de altura inválido. Tente novamente.");
-            }
-        }
-    }
-
-    private Gender readGender() {
-        while (true) {
-            System.out.print("Digite o gênero (MALE ou FEMALE): ");
-            try {
-                return Gender.valueOf(scanner.nextLine().trim().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: Gênero inválido. Tente novamente.");
-            }
-        }
-    }
-
-    private Objective readObjective() {
-        while (true) {
-            System.out.print("Digite o objetivo (BULKING ou CUTTING): ");
-            try {
-                return Objective.valueOf(scanner.nextLine().trim().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: Objetivo inválido. Tente novamente.");
-            }
-        }
-    }
-
-    private ActivityLevel readActivityLevel() {
-        while (true) {
-            System.out.print("Digite o nível de atividade diária (LOW, MEDIUM, HIGH): ");
-            try {
-                return ActivityLevel.valueOf(scanner.nextLine().trim().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: Nível de atividade inválido. Tente novamente.");
-            }
-        }
-    }
-
 }
+

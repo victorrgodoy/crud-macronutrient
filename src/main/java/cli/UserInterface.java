@@ -35,6 +35,12 @@ public class UserInterface {
                 case 1:
                     userController.createUser();
                     break;
+                case 2:
+                    userController.readUser();
+                    break;
+                case 3:
+                    userController.updateUser();
+                    break;
                 case 4:
                     userController.deleteUser();
                     break;
@@ -45,8 +51,7 @@ public class UserInterface {
         }
     }
 
-
-    public static void displayMenu() {
+    private static void displayMenu() {
         System.out.println("\n=== Menu ===");
         System.out.println("1. Criar novo usuário");
         System.out.println("2. Lêr informações do usuário");
