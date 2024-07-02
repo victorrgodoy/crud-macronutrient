@@ -68,17 +68,17 @@ public class UserController {
                 return;
             }
 
-            User user = builderUser();
-            userDAO.update(cpf, user);
+            User updatedUser = updateBuilderUser(cpf);
+            userDAO.update(cpf, updatedUser);
             System.out.println("Usuário atualizado com sucesso!");
-            dietController.updateDiet(user);
-
+            dietController.updateDiet(updatedUser);
         } catch (IllegalArgumentException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Erro: Ocorreu um problema ao atualizar o usuário. Por favor, tente novamente.");
         }
     }
+
 
     public void deleteUser() {
         try {
@@ -127,6 +127,23 @@ public class UserController {
                 .weight(weight)
                 .height(height)
                 .gender(gender)
+                .objective(objective)
+                .activityLevel(activityLevel)
+                .build();
+    }
+
+    private User updateBuilderUser(String cpf) {
+        int age = inputReader.readAge();
+        double weight = inputReader.readWeight();
+        double height = inputReader.readHeight();
+        Objective objective = inputReader.readObjective();
+        ActivityLevel activityLevel = inputReader.readActivityLevel();
+
+        return User.builder()
+                .cpf(cpf)
+                .age(age)
+                .weight(weight)
+                .height(height)
                 .objective(objective)
                 .activityLevel(activityLevel)
                 .build();

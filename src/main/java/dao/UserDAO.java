@@ -68,20 +68,20 @@ public class UserDAO {
     }
 
     public void update(String cpf, User user) {
-        String sql = "UPDATE user SET name = ?, age = ?, weight = ?, height = ?, gender = ?, objective = ? WHERE cpf = ?";
+        String sql = "UPDATE user SET age = ?, weight = ?, height = ?, objective = ?, activity_level = ? WHERE cpf = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setInt(2, user.getAge());
-            preparedStatement.setDouble(3, user.getWeight());
-            preparedStatement.setDouble(4, user.getHeight());
-            preparedStatement.setString(5, String.valueOf(user.getGender()));
-            preparedStatement.setString(6, String.valueOf(user.getObjective()));
-            preparedStatement.setString(7, cpf);
+            preparedStatement.setInt(1, user.getAge());
+            preparedStatement.setDouble(2, user.getWeight());
+            preparedStatement.setDouble(3, user.getHeight());
+            preparedStatement.setString(4, String.valueOf(user.getObjective()));
+            preparedStatement.setString(5, String.valueOf(user.getActivityLevel()));
+            preparedStatement.setString(6, cpf);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating user", e);
         }
     }
+
 
     public void delete(String cpf) {
         String sql = "DELETE FROM user WHERE cpf = ?";

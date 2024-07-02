@@ -1,6 +1,7 @@
 package controller;
 
 import dao.DietDAO;
+import dao.UserDAO;
 import model.*;
 import service.NutriServiceImp;
 
@@ -8,9 +9,11 @@ import java.time.LocalDate;
 
 public class DietController {
     private final DietDAO dietDAO;
+    private final UserDAO userDAO;
 
     public DietController(){
         this.dietDAO = DietDAO.getInstance();
+        this.userDAO = UserDAO.getInstance();
     }
 
     public void createDiet(User user) {
@@ -43,16 +46,17 @@ public class DietController {
     public void updateDiet(User user) {
         try {
             String cpf = user.getCpf();
-            Diet diet = builderDiet(user);
-            dietDAO.update(cpf,diet);
+            User updatedUser = userDAO.read(cpf);
+            Diet updatedDiet = builderDiet(updatedUser);
+            dietDAO.update(cpf, updatedDiet);
             System.out.println("Dieta atualizada com sucesso!");
-
         } catch (IllegalArgumentException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Erro: Ocorreu um problema ao atualizar a dieta. Por favor, tente novamente.");
         }
     }
+
 
     private Diet builderDiet(User user) {
         NutriServiceImp nutriServiceImp = NutriServiceImp.getInstance();
