@@ -5,10 +5,10 @@ import model.Gender;
 import java.text.DecimalFormat;
 
 public interface NutriService {
+    DecimalFormat df = new DecimalFormat("#.##");
 
     default double calculateIMC(double weight, double height) {
         double imc = weight / (height * height);
-        DecimalFormat df = new DecimalFormat("#.##");
         return Double.parseDouble(df.format(imc));
     }
 
@@ -49,27 +49,32 @@ public interface NutriService {
 
     default double calculateBulking(double basalRate, double activityFactor) {
         double dailyCaloric = basalRate * activityFactor;
-        return dailyCaloric * 1.15;
+        double bulking =  dailyCaloric * 1.15;
+        return Double.parseDouble(df.format(bulking));
     }
 
     default double calculateCutting(double basalRate, double activityFactor) {
         double dailyCaloric = basalRate * activityFactor;
-        return dailyCaloric * 0.85;
+        double cutting =  dailyCaloric * 0.85;
+        return Double.parseDouble(df.format(cutting));
     }
 
     default double calculateProtein(double weight) {
-        return 2.0 * weight;
+        double protein =  2.0 * weight;
+        return Double.parseDouble(df.format(protein));
     }
 
     default double calculateFat(double weight) {
-        return 0.8 * weight;
+        double fat = 0.8 * weight;
+        return Double.parseDouble(df.format(fat));
     }
 
     default double calculateCarb(double cals, double protein, double fat) {
         double proteinCalories = protein * 4;
         double fatCalories = fat * 9;
         double remainingCalories = cals - (proteinCalories + fatCalories);
-        return remainingCalories / 4;
+        double carb = remainingCalories / 4;
+        return Double.parseDouble(df.format(carb));
     }
 
 }

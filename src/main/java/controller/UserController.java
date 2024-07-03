@@ -44,9 +44,9 @@ public class UserController {
             }
             System.out.println("=== Dados do usuário ===");
             System.out.println("Nome: " + user.getName());
-            System.out.println("Idade: " + user.getAge());
+            System.out.println("Idade: " + user.getAge() + " anos");
             System.out.println("Peso: " + user.getWeight() + " kg");
-            System.out.println("Altura: " + user.getHeight() + " cm");
+            System.out.println("Altura: " + user.getHeight() + " m");
             System.out.println("Gênero: " + user.getGender());
             System.out.println("Objetivo: " + user.getObjective());
             System.out.println("Nível de Atividade: " + user.getActivityLevel());

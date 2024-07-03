@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DietDAO {
+public class    DietDAO {
     private final Connection connection;
     private static final DietDAO INSTANCE = new DietDAO();
     private static final Logger LOGGER = Logger.getLogger(DietDAO.class.getName());
@@ -37,7 +37,7 @@ public class DietDAO {
     }
 
     public void create(Diet diet, String cpf) {
-        String sql = "INSERT INTO diet (user_id, cals, proteins, carbs, fats, date) " +
+        String sql = "INSERT INTO diet (user_id, cal, protein, carb, fat, date) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             int userId = getIdUser(cpf);
@@ -64,10 +64,10 @@ public class DietDAO {
             preparedStatement.setInt(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    double cals = resultSet.getDouble("cals");
-                    double proteins = resultSet.getDouble("proteins");
-                    double carbs = resultSet.getDouble("carbs");
-                    double fats = resultSet.getDouble("fats");
+                    double cals = resultSet.getDouble("cal");
+                    double proteins = resultSet.getDouble("protein");
+                    double carbs = resultSet.getDouble("carb");
+                    double fats = resultSet.getDouble("fat");
                     LocalDate date = resultSet.getDate("date").toLocalDate();
                     return new Diet(cals, proteins, carbs, fats, date);
                 }
@@ -79,7 +79,7 @@ public class DietDAO {
     }
 
     public void update(String cpf, Diet diet) {
-        String sql = "UPDATE diet SET cals = ?, proteins = ?, carbs = ?, fats = ? WHERE user_id = ?";
+        String sql = "UPDATE diet SET cal = ?, protein = ?, carb = ?, fat = ? WHERE user_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setDouble(1, diet.getCals());
             preparedStatement.setDouble(2, diet.getProteins());
