@@ -15,7 +15,7 @@ Isso inclui o cadastro de usuários, além da criação, leitura, atualização 
 - **CRUD:** Permite registrar, atualizar, ler e deletar as informações dos usuários.
 - **Gerenciamento de Macronutrientes:** Fornece a quantidade exata de macronutrientes necessários de acordo com os dados e objetivos de cada usuário.
 - **Gerenciamento de Histórico:** Gera um histórico do usuário com o nível e o tipo de IMC (Índice de Massa Corporal) do usuário.
-- **Armazenamento de informações:** Todas as informações geradas como: macronutrientes, histórico IMC e informações pessoais são armazenadas em um banco de dados.
+- **Armazenamento de informações:** Todas as informações geradas, como macronutrientes, histórico IMC e informações pessoais, são armazenadas no banco de dados e um arquivo.txt.
 
 ## Tecnologias Utilizadas
 
