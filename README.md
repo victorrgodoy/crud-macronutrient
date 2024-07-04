@@ -11,7 +11,7 @@ O usuário informa seu objetivo e o aplicativo calcula a quantidade ideal de mac
 
 - **CRUD:** Permite registrar, atualizar, ler e deletar as informações dos usuários.
 - **Gerenciamento de Macronutrientes:** Fornece a quantidade exata de macronutrientes necessários de acordo com os dados e objetivos de cada usuário.
-- **Gerador IMC:** Calcula e fornece o nível do IMC (Índice de Massa Corporal).
+- **Gerenciamento histórico:** Gera um histórico do usuário com o nível e o tipo de IMC (Índice de Massa Corporal) do usuário.
 - **Padrões de Design:** Aplica padrões como Singleton, DAO (Data Access Object), e MVC (Model-View-Controller) para estruturar o projeto.
 - **Logging:** Registro de eventos e erros.
 

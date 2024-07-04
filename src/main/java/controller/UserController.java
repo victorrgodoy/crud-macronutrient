@@ -11,12 +11,14 @@ public class UserController {
     private final UserDAO userDAO;
     private final InputReader inputReader;
     private final DietController dietController;
+    private final HistoricController historicController;
 
     public UserController(Scanner scanner) {
         this.scanner = scanner;
         this.userDAO = UserDAO.getInstance();
         this.inputReader = new InputReader(scanner);
         this.dietController = new DietController();
+        this.historicController = new HistoricController();
     }
 
     public void createUser() {
@@ -26,6 +28,7 @@ public class UserController {
             userDAO.create(user);
             System.out.println("Usuário criado com sucesso!");
             dietController.createDiet(user);
+            historicController.createHistoric(user);
         } catch (IllegalArgumentException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (Exception e) {
@@ -52,6 +55,8 @@ public class UserController {
             System.out.println("Nível de Atividade: " + user.getActivityLevel());
             System.out.println("------------------------------");
             dietController.readDiet(cpf);
+            System.out.println("------------------------------");
+            historicController.readHistoric(cpf);
         } catch (Exception e) {
             System.out.println("Erro: Ocorreu um problema ao ler o usuário. Por favor, tente novamente.");
         }
@@ -72,6 +77,7 @@ public class UserController {
             userDAO.update(cpf, updatedUser);
             System.out.println("Usuário atualizado com sucesso!");
             dietController.updateDiet(updatedUser);
+            historicController.createHistoric(updatedUser);
         } catch (IllegalArgumentException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (Exception e) {
