@@ -9,11 +9,11 @@ O usuário informa seu objetivo e o aplicativo calcula a quantidade ideal de mac
 
 ## Funcionalidades
 
-- **Cadastro de Usuário:** Permite registrar novos usuários com informações pessoais e objetivos nutricionais.
-- **Gerenciamento de Dietas:** Criação, leitura, atualização e exclusão de dietas personalizadas para cada usuário.
-- **Persistência em Banco de Dados:** Utiliza JDBC para conectar e manipular dados em um banco de dados MySQL.
+- **CRUD:** Permite registrar, atualizar, ler e deletar as informações dos usuários.
+- **Gerenciamento de Macronutrientes:** Fornece a quantidade exata de macronutrientes necessários de acordo com os dados e objetivos de cada usuário.
+- **Gerador IMC:** Calcula e fornece o nível do IMC (Índice de Massa Corporal).
 - **Padrões de Design:** Aplica padrões como Singleton, DAO (Data Access Object), e MVC (Model-View-Controller) para estruturar o projeto.
-- **Logging:** Integração: com java.util.logging para registro de eventos e erros.
+- **Logging:** Registro de eventos e erros.
 
 ## Tecnologias Utilizadas
 
