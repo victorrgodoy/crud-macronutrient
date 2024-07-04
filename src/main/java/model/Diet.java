@@ -16,4 +16,9 @@ public class Diet {
     private double fats;
     private LocalDate date;
 
+    @Override
+    public String toString(){
+        return "Macronutrientes:" + "\n" +
+                "Calorias: " + this.cals + ", Proteínas: " + this.proteins + ", Carboidratos: " + this.carbs + ", Gorduras: " + this.fats + "\n";
+    }
 }

@@ -6,10 +6,7 @@ import model.Gender;
 import model.Objective;
 import model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +23,7 @@ public class UserDAO {
         return INSTANCE;
     }
 
-    public void create(User user) {
+    public boolean create(User user) {
         String sql = "INSERT INTO user (cpf, name, age, weight, height, gender, objective, activity_level) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -39,10 +36,17 @@ public class UserDAO {
             preparedStatement.setString(7, String.valueOf(user.getObjective()));
             preparedStatement.setString(8, String.valueOf(user.getActivityLevel()));
             preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("CPF já cadastrado: " + user.getCpf());
+            LOGGER.log(Level.WARNING, "CPF já cadastrado", e);
+            return false;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating user", e);
+            return false;
         }
     }
+
 
     public User read(String cpf) {
         String sql = "SELECT * FROM user WHERE cpf = ?";
@@ -67,7 +71,7 @@ public class UserDAO {
         return null;
     }
 
-    public void update(String cpf, User user) {
+    public boolean update(String cpf, User user) {
         String sql = "UPDATE user SET age = ?, weight = ?, height = ?, objective = ?, activity_level = ? WHERE cpf = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, user.getAge());
@@ -76,22 +80,26 @@ public class UserDAO {
             preparedStatement.setString(4, String.valueOf(user.getObjective()));
             preparedStatement.setString(5, String.valueOf(user.getActivityLevel()));
             preparedStatement.setString(6, cpf);
-            preparedStatement.executeUpdate();
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return rowsUpdated > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating user", e);
+            return false;
         }
     }
 
-
-    public void delete(String cpf) {
+    public boolean delete(String cpf) {
         String sql = "DELETE FROM user WHERE cpf = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, cpf);
-            preparedStatement.executeUpdate();
+            int rowsDeleted = preparedStatement.executeUpdate();
+            return rowsDeleted > 0; // Retorna verdadeiro se pelo menos uma linha foi deletada
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting user", e);
+            return false;
         }
     }
+
 
 }
 

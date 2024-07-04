@@ -33,15 +33,18 @@ public class UserInterface {
                     System.out.println("Encerrando o programa.");
                     return;
                 case 1:
+                    System.out.println("=== Novo usuário ===");
                     userController.createUser();
                     break;
                 case 2:
+                    System.out.println("=== Dados do usuário ===");
                     userController.readUser();
                     break;
                 case 3:
                     userController.updateUser();
                     break;
                 case 4:
+                    System.out.println("=== Deletando usuário ===");
                     userController.deleteUser();
                     break;
                 default:

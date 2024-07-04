@@ -1,7 +1,6 @@
 package dao;
 
 import factory.ConnectionFactory;
-import model.Diet;
 import model.Historic;
 
 import java.sql.*;

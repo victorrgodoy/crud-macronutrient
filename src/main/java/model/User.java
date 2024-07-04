@@ -17,4 +17,11 @@ public class User {
     private final Gender gender;
     private final Objective objective;
     private final ActivityLevel activityLevel;
+
+    @Override
+    public String toString(){
+        return "Dados do usuário: " + "\n" +
+                "Nome: " + this.name + ", Idade: " + this.age + ", Peso: " + this.weight + " kg, Altura: "
+                + this.height +  " cm, Gênero: " + this.gender + ", Objetivo: " + this.objective + ", Nível Atividade: " + this.activityLevel + "\n";
+    }
 }
